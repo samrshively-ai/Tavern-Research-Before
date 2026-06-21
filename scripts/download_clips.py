@@ -1,0 +1,9 @@
+README.md
+scripts/
+  download_clips.py
+  search_transcript.py
+  batch_trim_clips.py
+skills/
+  poll-graphic/SKILL.md
+  radio-ad-30/SKILL.md
+  news-memo/SKILL.md
