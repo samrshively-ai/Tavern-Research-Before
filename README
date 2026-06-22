@@ -1,0 +1,42 @@
+Content Ops Toolkit
+Scripts and Claude skill files supporting Tavern's content production workflow — sourcing/processing video clips and generating standardized written/visual outputs (radio scripts, memos, poll graphics).
+What's here
+```
+scripts/    Runnable Python tools for sourcing and processing media
+skills/     Claude skill files that guide Claude's output for recurring content tasks
+```
+Scripts are things a person (or a pipeline) runs directly, with real inputs and outputs on disk.
+Skills are instruction files Claude reads to produce a consistent output format — there's nothing to "run," they're loaded by Claude when the matching task comes up.
+Scripts
+Script	Purpose	Dependencies
+`scripts/download_clips.py`	Downloads video(s) from a URL (single video, playlist, or channel)	`yt-dlp`, `ffmpeg`
+`scripts/search_transcript.py`	Searches a Whisper-format transcript JSON for a phrase, returns timecodes	none (standard library only)
+`scripts/batch_trim_clips.py`	Batch-trims clips from source video(s), driven by a CSV of cut points	`ffmpeg`
+Each script has a docstring at the top of the file with full usage, arguments, and example commands — run `python <script>.py` with no arguments (or check the docstring) to see exact usage. Quick examples:
+```bash
+# Download a video or playlist
+python scripts/download_clips.py "https://www.youtube.com/watch?v=XXXXXXXX" --out ./downloads --quality 1080
+
+# Search a transcript for a phrase
+python scripts/search_transcript.py interview_transcript.json "Social Security"
+
+# Batch-trim clips from a CSV (columns: source_file, start, end, label)
+python scripts/batch_trim_clips.py clips_to_cut.csv ./raw_footage ./trimmed
+```
+Setup: these scripts assume `yt-dlp` and/or `ffmpeg` are already installed and on your system PATH (`pip install yt-dlp`; ffmpeg via your OS package manager or ffmpeg.org). No Python package dependencies beyond the standard library otherwise.
+Skills
+Skill	Use when
+`skills/poll-graphic`	You have a single poll/survey finding and need a clean, on-brand social graphic (one stat per card)
+`skills/radio-ad-30`	You have a producer's brief and need a first-cut 30-second radio ad script
+`skills/news-memo`	A client needs a short internal strategic memo on a breaking news event
+Each skill folder contains a `SKILL.md` with full usage rules, format/template, and constraints. Open the relevant file before using it — the rules matter (e.g., word limits, required disclaimers, sourcing requirements) and are easy to violate if skipped.
+Adding new things
+New script:
+Add it to `scripts/`, named for what it does (verb_noun.py — e.g. `download_clips.py`, not `script1.py` or a version number).
+Add a docstring at the top covering: purpose, dependencies, usage, arguments, output, one example command.
+Add a row to the Scripts table above.
+New skill:
+Create a new folder under `skills/` named with the skill's `name` (matching the `name:` field you'll put in its frontmatter — lowercase, hyphenated).
+Add a `SKILL.md` inside it, following the existing skills as a template (YAML frontmatter with `name` and `description`, then rules, then format/template).
+Add a row to the Skills table above.
+Naming convention (applies to everything): lowercase, hyphens for folder/skill names, underscores for script filenames, no version numbers in filenames (git tracks history — use commit messages or tags instead), no ad hoc abbreviations a new teammate wouldn't recognize.

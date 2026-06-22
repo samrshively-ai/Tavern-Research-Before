@@ -1,3 +1,30 @@
+"""
+download_clips.py
+
+Downloads video(s) from a URL (single video, playlist, or channel) using yt-dlp.
+
+Dependencies:
+    - yt-dlp must be installed and available on PATH (pip install yt-dlp)
+    - ffmpeg must be installed and on PATH (required by yt-dlp to merge audio/video)
+
+Usage:
+    python download_clips.py <url> [--out OUTPUT_DIR] [--max MAX_VIDEOS] [--quality HEIGHT]
+
+Arguments:
+    url          Video, playlist, or channel URL to download from
+    --out        Output directory for downloaded files (default: ./downloads)
+    --max        Max number of videos to download from a playlist/channel (default: all)
+    --quality    Max video height in pixels, e.g. 720 or 1080 (default: 720)
+
+Output:
+    Downloaded video files (.mp4) saved to the output directory, named
+    "<upload_date>_<title>.mp4". A matching .info.json metadata file is
+    saved alongside each video (from --write-info-json).
+
+Example:
+    python download_clips.py "https://www.youtube.com/watch?v=XXXXXXXX" --out ./downloads --quality 1080
+"""
+
 import os
 import sys
 import subprocess

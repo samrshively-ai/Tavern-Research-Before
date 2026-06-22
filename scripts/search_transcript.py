@@ -1,3 +1,30 @@
+"""
+search_transcript.py
+
+Searches a Whisper-style transcript JSON file for a phrase and returns the
+timecodes and surrounding text of every matching segment.
+
+Dependencies:
+    - None beyond the Python standard library.
+    - Expects a transcript JSON file with a top-level "segments" list, where
+      each segment has "text", "start", and "end" fields (this is the
+      standard output format from OpenAI Whisper / faster-whisper).
+
+Usage:
+    python search_transcript.py <transcript.json> <phrase>
+
+Arguments:
+    transcript.json   Path to a Whisper-format transcript JSON file
+    phrase             Phrase to search for (case-insensitive, substring match)
+
+Output:
+    Prints each matching segment's start/end timecode (HH:MM:SS.mmm) and the
+    full text of that segment to stdout. Prints "no matches" if none found.
+
+Example:
+    python search_transcript.py interview_transcript.json "Social Security"
+"""
+
 import json
 import sys
 import re
@@ -41,7 +68,7 @@ def seconds_to_tc(s):
 
 def main():
     if len(sys.argv) < 3:
-        print("usage: python TRANSCRIPT_TOOL_v2.py <transcript.json> <phrase>")
+        print("usage: python search_transcript.py <transcript.json> <phrase>")
         sys.exit(1)
 
     path = sys.argv[1]
